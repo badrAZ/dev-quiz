@@ -11,7 +11,7 @@ Back-end implementation with:
 - [ ] Jenkins
 - [ ] Docker
 - [ ] Applicative logger
-- [ ] Architecture micro service
+- [ ] Microservices architecture
 - [ ] Graph QL
 - [ ] Introspection (JSON schema?)
 - [ ] MongoDb
