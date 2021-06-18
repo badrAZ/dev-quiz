@@ -1,0 +1,5 @@
+.center {
+  width: 25vw; /* 25% screen width */
+  min-height: 50vh;
+  margin: 10vh 40vw;
+}
