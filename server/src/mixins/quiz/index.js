@@ -1,4 +1,6 @@
 import checkAnswers from './checkAnswers'
+import mapValues from 'lodash/mapValues'
+import omit from 'lodash/omit'
 import pickRandomQuestion from './pickRandomQuestions'
 
 export default class Quiz {
@@ -22,10 +24,12 @@ export default class Quiz {
   async getQuestions({ type }) {
     const app = this.#app
 
-    return pickRandomQuestion(
+    const questions = pickRandomQuestion(
       await app.callApiMethod('bd.get', { type }),
       app.config.nAskedQuestions
     )
+
+    return mapValues(questions, _ => omit(_, 'correctAnswer'))
   }
 
   async checkAnswers({ answers }) {
