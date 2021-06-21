@@ -13,10 +13,16 @@ import QuizForm from './quizForm'
 import SelectQuizType from './selectQuizType'
 
 export default function Quiz() {
-  const [type = 'javascript', setType] = React.useState()
+  const [type, setType] = React.useState('javascript')
   const { error, quiz } = FetchQuiz(type)
   const [quizAnswers, setQuizAnswers] = React.useState({})
-  const [formId] = React.useState(randomId())
+  const [formId, setFormId] = React.useState(randomId())
+
+  const onTypeChange = React.useCallback(type => {
+    setType(type)
+    setQuizAnswers({})
+    setFormId(randomId)
+  }, [])
 
   const validate = React.useCallback(event => {
     event.preventDefault()
@@ -29,7 +35,7 @@ export default function Quiz() {
         <h3 className='text-md-center'>
           <BsPuzzleFill /> Quiz
         </h3>
-        <SelectQuizType onChange={setType} value={type} />
+        <SelectQuizType onChange={onTypeChange} value={type} />
       </Card.Header>
       <Card.Body>
         {error !== undefined ? (
