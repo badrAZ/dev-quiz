@@ -38,7 +38,7 @@ function QuizPagination({ pos, setPos, nQuestions }) {
   }, [pos, setPos])
 
   return (
-    <Row>
+    <Row className='mt-1'>
       <Col>
         <Button size='sm' disabled={pos === 0} onClick={back}>
           Back
