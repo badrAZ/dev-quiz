@@ -8,7 +8,7 @@ import React from 'react'
 import Row from 'react-bootstrap/Row'
 import { MdQuestionAnswer } from 'react-icons/md'
 
-function SubForm({ id, question, answers }) {
+function SubForm({ question, answers, onAnswerChange, chosenAnswer }) {
   return [
     <Row className='mb-1' key='question'>
       <Col>
@@ -18,7 +18,7 @@ function SubForm({ id, question, answers }) {
     ...Object.entries(answers).map(([value, answer]) => (
       <Row key={value}>
         <Col>
-          <Form.Check label={answer} type='radio' id={value} />
+          <Form.Check label={answer} type='radio' id={value} checked={chosenAnswer === value} onChange={onAnswerChange} value={value} />
         </Col>
       </Row>
     )),
@@ -61,12 +61,14 @@ export default function QuizForm({ quiz, quizAnswers, setQuizAnswers }) {
   const nQuestions = Object.keys(quiz).length
 
   const currentQuiz = React.useMemo(() => {
-    const [id, currentQuiz] = Object.entries(quiz)[pos]
+    const [id, { question, answers }] = Object.entries(quiz)[pos]
     return {
-      id,
-      ...currentQuiz,
+      answers,
+      chosenAnswer: quizAnswers[id],
+      onAnswerChange: event => setQuizAnswers({ ...quizAnswers, [id]: event.target.value }),
+      question,
     }
-  }, [quiz, pos])
+  }, [quiz, pos, quizAnswers, setQuizAnswers])
 
   return (
     <Container fluid>
