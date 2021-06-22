@@ -1,8 +1,15 @@
 import Button from 'react-bootstrap/Button'
+import ListGroup from 'react-bootstrap/ListGroup'
 import Modal from 'react-bootstrap/Modal'
 import PropTypes from 'react-proptypes'
 import React from 'react'
-import { AiFillTrophy, AiFillCrown } from 'react-icons/ai'
+import { MdQuestionAnswer } from 'react-icons/md'
+import {
+  AiFillTrophy,
+  AiFillCrown,
+  AiFillCloseCircle,
+  AiFillCheckCircle,
+} from 'react-icons/ai'
 
 import Error from './error'
 
@@ -31,6 +38,31 @@ function Score({ score }) {
   )
 }
 
+function Answers({ answers }) {
+  return (
+    <ListGroup>
+      {answers.map(
+        ({ q, answer, correct }) =>
+          (answer === undefined || answer !== correct) && (
+            <ListGroup.Item key={q}>
+              <p>
+                <MdQuestionAnswer /> {q}
+              </p>
+              <p className='text-danger'>
+                <AiFillCloseCircle /> {answer ?? 'Not filled'}
+              </p>
+              {correct !== undefined && (
+                <p className='text-success'>
+                  <AiFillCheckCircle /> {correct}
+                </p>
+              )}
+            </ListGroup.Item>
+          )
+      )}
+    </ListGroup>
+  )
+}
+
 export default function QuizResultModal({
   quizResult: { score, answers, error },
   setShowModal,
@@ -55,6 +87,9 @@ export default function QuizResultModal({
           <div>
             <div className='center-middle-block'>
               <Score score={score} />
+            </div>
+            <div className='mt-2'>
+              <Answers answers={answers} />
             </div>
           </div>
         )}

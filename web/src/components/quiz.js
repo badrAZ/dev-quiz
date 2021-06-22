@@ -46,8 +46,8 @@ export default function Quiz() {
           Object.entries(quiz).forEach(([id, { question }]) => {
             result.answers.push({
               q: question,
-              answer: quizAnswers[id],
-              correct: correctAnswers[id] ?? quizAnswers[id],
+              answer: quiz[id].answers[quizAnswers[id]],
+              correct: quiz[id].answers[correctAnswers[id] ?? quizAnswers[id]],
             })
           })
 
