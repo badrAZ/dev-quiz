@@ -16,42 +16,58 @@ import SelectQuizType from './selectQuizType'
 
 export default function Quiz() {
   const [type, setType] = React.useState('javascript')
-  const { error, quiz } = FetchQuiz(type)
+  const { error, quiz, reFetch } = FetchQuiz(type)
   const [quizAnswers, setQuizAnswers] = React.useState({})
   const [formId, setFormId] = React.useState(randomId())
-  const [quizResult, setQuizResult] = React.useState({ show: false })
+  const [quizResult, setQuizResult] = React.useState({})
+  const [showModal, setShowModal] = React.useState(false)
 
   const cleanForm = React.useCallback(() => {
     setQuizAnswers({})
     setFormId(randomId)
   }, [])
 
-  const onTypeChange = React.useCallback(type => {
-    setType(type)
-    cleanForm()
-  }, [cleanForm])
-
-  const onSubmit = React.useCallback(event => {
-    event.preventDefault()
-
-    checkAnswers(quizAnswers, type).then(({ correctAnswers, score }) => {
-      const result = { show: true, score, answers: [] }
-      Object.entries(quiz).forEach(([id, { question }]) => {
-        result.answers.push({ q: question, answer: quizAnswers[id], correct: correctAnswers[id] ?? quizAnswers[id] })
-      })
-
-      setQuizResult(result)
+  const onTypeChange = React.useCallback(
+    type => {
+      setType(type)
       cleanForm()
-    }, error => {
-      setQuizResult({
-        show: false,
-        error
-      })
-      cleanForm()
-    })
-  }, [quizAnswers, type, quiz, cleanForm])
+    },
+    [cleanForm]
+  )
 
-  const setShow = React.useCallback(() => setQuizResult({ show: false }), [])
+  const onSubmit = React.useCallback(
+    event => {
+      event.preventDefault()
+
+      // correct answer can be undefined when the user doesn't respond to the question
+      checkAnswers(quizAnswers, type).then(
+        ({ correctAnswers, score }) => {
+          const result = { score, answers: [] }
+          Object.entries(quiz).forEach(([id, { question }]) => {
+            result.answers.push({
+              q: question,
+              answer: quizAnswers[id],
+              correct: correctAnswers[id] ?? quizAnswers[id],
+            })
+          })
+
+          setQuizResult(result)
+          setShowModal(true)
+          cleanForm()
+          reFetch()
+        },
+        error => {
+          setQuizResult({
+            error,
+          })
+          setShowModal(true)
+          cleanForm()
+          reFetch()
+        }
+      )
+    },
+    [quizAnswers, type, quiz, cleanForm, reFetch]
+  )
 
   return (
     <Card>
@@ -62,7 +78,11 @@ export default function Quiz() {
         <SelectQuizType onChange={onTypeChange} value={type} />
       </Card.Header>
       <Card.Body>
-        <QuizResultModal setShow={setShow} quizResult={quizResult} />
+        <QuizResultModal
+          setShowModal={setShowModal}
+          showModal={showModal}
+          quizResult={quizResult}
+        />
         {error !== undefined ? (
           <Error error={error} />
         ) : (
