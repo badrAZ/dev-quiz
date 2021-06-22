@@ -1,6 +1,6 @@
 {
   "name": "dev-quiz",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "dist/dev-quiz.lib.js",
   "license": "MIT",
   "dependencies": {
