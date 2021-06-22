@@ -3,3 +3,10 @@
   min-height: 50vh;
   margin: 10vh 40vw;
 }
+
+.center-middle-block {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}

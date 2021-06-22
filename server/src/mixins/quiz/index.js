@@ -32,11 +32,11 @@ export default class Quiz {
     return mapValues(questions, _ => omit(_, 'correctAnswer'))
   }
 
-  async checkAnswers({ answers }) {
+  async checkAnswers({ answers, type }) {
     const app = this.#app
 
     return checkAnswers(
-      await app.callApiMethod('bd.get'),
+      await app.callApiMethod('bd.get', { type }),
       answers,
       app.config.nAskedQuestions
     )
