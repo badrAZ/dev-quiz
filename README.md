@@ -1,6 +1,5 @@
 # Dev quiz
 
-> This application has been developed during a formation, it can be used for educational purpose. It will contain:
 
 Back-end implementation with:
 
